@@ -2,12 +2,15 @@
 /*This code was generated using the UMPLE 1.29.1.4584.3d417815a modeling language!*/
 
 
+import java.awt.*;
 
 // line 89 "model.ump"
 // line 150 "model.ump"
 public class MoveableObject
 {
-
+public enum Direction{
+  NORTH,SOUTH,EAST,WEST
+}
   //------------------------
   // MEMBER VARIABLES
   //------------------------
@@ -28,12 +31,9 @@ public class MoveableObject
   // INTERFACE
   //------------------------
 
-  public boolean setLocation(Point aLocation)
+  public void setLocation(Point aLocation)
   {
-    boolean wasSet = false;
-    location = aLocation;
-    wasSet = true;
-    return wasSet;
+    location = new Point(aLocation);
   }
 
   public Point getLocation()
@@ -41,9 +41,18 @@ public class MoveableObject
     return location;
   }
 
-  public void delete()
-  {}
-
+  public void move(Direction direction){
+    switch (direction){
+      case NORTH:
+        location.y--;
+      case SOUTH:
+        location.y++;
+      case EAST:
+        location.x++;
+      case WEST:
+        location.x--;
+    }
+  }
 
   public String toString()
   {

@@ -2,6 +2,7 @@
 /*This code was generated using the UMPLE 1.29.1.4584.3d417815a modeling language!*/
 
 
+import java.awt.*;
 
 // line 94 "model.ump"
 // line 155 "model.ump"
@@ -11,23 +12,31 @@ public class Weapon extends MoveableObject
   //------------------------
   // MEMBER VARIABLES
   //------------------------
+  public enum Weapons{
+    Candlestick,Dagger,LeadPipe,Revolver,Rope,Spanner
+  }
 
+  private Weapons weapon;
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Weapon(Point aLocation)
+  public Weapon(Point aLocation, Weapons weapon)
   {
     super(aLocation);
+    this.weapon = weapon;
   }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public void delete()
-  {
-    super.delete();
+
+  public Weapons getWeapon() {
+    return weapon;
   }
 
+  public void setWeapon(Weapons weapon) {
+    this.weapon = weapon;
+  }
 }
