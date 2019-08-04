@@ -10,13 +10,14 @@ import java.util.List;
 // line 119 "model.ump"
 public class Player extends MoveableObject
 {
-public enum playerName{
-  MissScarlett,ColonelMustard, MrsWhite, MrGreen, MrsPeacock,ProfessorPlum
-}
+  public void addCard(Card remove) {
+    cards.add(remove);
+  }
+
   //------------------------
   // MEMBER VARIABLES
   //------------------------
-  private playerName playerName;
+  private CharacterCard.Character playerName;
   //Player Associations
   private List<Card> cards;
 
@@ -24,8 +25,8 @@ public enum playerName{
   // CONSTRUCTOR
   //------------------------
 
-  public Player(Point aLocation, playerName playerName) {
-    super(aLocation);
+  public Player(/**Point aLocation,**/ CharacterCard.Character playerName) {
+    super(/**aLocation**/);
     this.playerName = playerName;
   }
 
@@ -39,11 +40,16 @@ public enum playerName{
     return aCard;
   }
 
-  public Player.playerName getPlayerName() {
+  public CharacterCard.Character getPlayerName() {
     return playerName;
   }
 
-  public void setPlayerName(Player.playerName playerName) {
+  public void setPlayerName(CharacterCard.Character playerName) {
     this.playerName = playerName;
+  }
+
+  @Override
+  public String toString() {
+    return Character.toString(playerName.toString().charAt(0));
   }
 }

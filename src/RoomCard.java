@@ -19,16 +19,12 @@ public class RoomCard extends Card
   //------------------------
 
   //RoomCard Attributes
-  private Room location;
+  private Room roomName;
 
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
 
-  public RoomCard(Player aPlayer, Room aLocation)
+  public RoomCard(Room roomName)
   {
-    super(aPlayer);
-    location = aLocation;
+    this.roomName = roomName;
   }
 
   //------------------------
@@ -38,24 +34,19 @@ public class RoomCard extends Card
   public boolean setLocation(Room aLocation)
   {
     boolean wasSet = false;
-    location = aLocation;
+    roomName = aLocation;
     wasSet = true;
     return wasSet;
   }
 
-  public Room getLocation()
+  public Room getRoomName()
   {
-    return location;
-  }
-
-  public void delete()
-  {
-    super.delete();
+    return roomName;
   }
 
   // line 80 "model.ump"
    public String toString(){
-    // Return and Enum
+    return roomName.toString();
   }
 
 }

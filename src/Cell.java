@@ -2,110 +2,98 @@
 /*This code was generated using the UMPLE 1.29.1.4584.3d417815a modeling language!*/
 
 
+import java.io.Console;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 // line 35 "model.ump"
 // line 114 "model.ump"
-public class Cell
-{
+public class Cell {
 
-  //------------------------
-  // ENUMERATIONS
-  //------------------------
+    //------------------------
+    // ENUMERATIONS
+    //------------------------
 
-  public enum Room { Hallway, Kitchen, Ballroom, Conservatory, BillardRoom, Hall, Study, Library, Lounge, DiningRoom }
 
-  //------------------------
-  // MEMBER VARIABLES
-  //------------------------
+    public enum Room {Hallway, Kitchen, Ballroom, Conservatory, BillardRoom, Hall, Study, Library, Lounge, DiningRoom;}
 
-  //Cell Attributes
-  private Room cellRoom;
+    private boolean isDoor = false;
 
-  //Cell Associations
-  private Board board;
+    public enum WallDirections {North, South, East, West;}
 
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
+    private HashSet<WallDirections> walls;
 
-  public Cell(Room aCellRoom, Board aBoard)
-  {
-    cellRoom = aCellRoom;
-    boolean didAddBoard = setBoard(aBoard);
-    if (!didAddBoard)
-    {
-      throw new RuntimeException("Unable to create cell due to board. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-  }
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+    //Cell Attributes
+    private Room cellRoom;
 
-  //------------------------
-  // INTERFACE
-  //------------------------
+    private MoveableObject item;
+    //Cell Associations
+    private HashMap<Room, String> roomColors;
+    private Board board;
 
-  public boolean setCellRoom(Room aCellRoom)
-  {
-    boolean wasSet = false;
-    cellRoom = aCellRoom;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public Room getCellRoom()
-  {
-    return cellRoom;
-  }
-  /* Code from template association_GetOne */
-  public Board getBoard()
-  {
-    return board;
-  }
-  /* Code from template association_SetOneToAtMostN */
-  public boolean setBoard(Board aBoard)
-  {
-    boolean wasSet = false;
-    //Must provide board to cell
-    if (aBoard == null)
-    {
-      return wasSet;
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+    public Cell(Room aCellRoom) {
+        cellRoom = aCellRoom;
+        walls = new HashSet<>();
+        generateRoomColors();
     }
 
-    //board already at maximum (600)
-    if (aBoard.numberOfCells() >= Board.maximumNumberOfCells())
-    {
-      return wasSet;
+    private void generateRoomColors() {
+        roomColors = new HashMap<>();
+        roomColors.put(Room.Hallway,ConsoleColors.WHITE);
+        roomColors.put(Room.Ballroom,ConsoleColors.BLUE);
+        roomColors.put(Room.Hall,ConsoleColors.BLUE);
+        roomColors.put(Room.BillardRoom,ConsoleColors.PURPLE);
+        roomColors.put(Room.Study,ConsoleColors.PURPLE);
+        roomColors.put(Room.Kitchen,ConsoleColors.PURPLE);
+        roomColors.put(Room.Conservatory,ConsoleColors.GREEN);
+        roomColors.put(Room.Lounge,ConsoleColors.GREEN);
+        roomColors.put(Room.DiningRoom,ConsoleColors.BLUE);
+        roomColors.put(Room.Library,ConsoleColors.GREEN);
     }
-    
-    Board existingBoard = board;
-    board = aBoard;
-    if (existingBoard != null && !existingBoard.equals(aBoard))
-    {
-      boolean didRemove = existingBoard.removeCell(this);
-      if (!didRemove)
-      {
-        board = existingBoard;
-        return wasSet;
-      }
-    }
-    board.addCell(this);
-    wasSet = true;
-    return wasSet;
-  }
-
-  public void delete()
-  {
-    Board placeholderBoard = board;
-    this.board = null;
-    if(placeholderBoard != null)
-    {
-      placeholderBoard.removeCell(this);
-    }
-  }
 
 
-  public String toString()
-  {
-    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "cellRoom" + "=" + (getCellRoom() != null ? !getCellRoom().equals(this)  ? getCellRoom().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "board = "+(getBoard()!=null?Integer.toHexString(System.identityHashCode(getBoard())):"null");
-  }
+    //------------------------
+    // INTERFACE
+    //------------------------
+    public MoveableObject getItem() {
+        return item;
+    }
+
+    public void setItem(MoveableObject item) {
+        this.item = item;
+    }
+
+    public Room getCellRoom() {
+        return cellRoom;
+    }
+
+    public void setCellRoom(Room cellRoom) {
+        this.cellRoom = cellRoom;
+    }
+
+    public void addWall(WallDirections directions) {
+        walls.add(directions);
+    }
+
+    public boolean isDoor() {
+        return isDoor;
+    }
+
+    public void setDoor(boolean door) {
+        isDoor = door;
+    }
+
+    /* Code from template association_GetOne */
+
+    public String toString() {
+        return (isDoor?ConsoleColors.RED:roomColors.get(cellRoom))+(item!=null?item.toString():(cellRoom.equals(Room.Hallway)?'_':cellRoom.toString().charAt(0)))+ConsoleColors.RESET;
+    }
 }

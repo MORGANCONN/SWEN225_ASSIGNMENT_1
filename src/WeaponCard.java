@@ -25,9 +25,8 @@ public class WeaponCard extends Card
   // CONSTRUCTOR
   //------------------------
 
-  public WeaponCard(Player aPlayer, WeaponType aWeapon)
+  public WeaponCard(WeaponType aWeapon)
   {
-    super(aPlayer);
     weapon = aWeapon;
   }
 
@@ -48,14 +47,9 @@ public class WeaponCard extends Card
     return weapon;
   }
 
-  public void delete()
-  {
-    super.delete();
-  }
-
   // line 60 "model.ump"
    public String toString(){
-    // Return and Enum
+    return weapon.toString();
   }
 
 }

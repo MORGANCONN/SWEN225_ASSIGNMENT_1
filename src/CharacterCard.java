@@ -25,9 +25,8 @@ public class CharacterCard extends Card
   // CONSTRUCTOR
   //------------------------
 
-  public CharacterCard(Player aPlayer, Character aName)
+  public CharacterCard(Character aName)
   {
-    super(aPlayer);
     name = aName;
   }
 
@@ -48,14 +47,9 @@ public class CharacterCard extends Card
     return name;
   }
 
-  public void delete()
-  {
-    super.delete();
-  }
-
   // line 70 "model.ump"
    public String toString(){
-    // Return and Enum
+    return name.toString();
   }
 
 }

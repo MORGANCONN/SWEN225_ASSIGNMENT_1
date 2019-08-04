@@ -22,9 +22,9 @@ public enum Direction{
   // CONSTRUCTOR
   //------------------------
 
-  public MoveableObject(Point aLocation)
+  public MoveableObject(/**Point aLocation**/)
   {
-    location = aLocation;
+//    location = aLocation;
   }
 
   //------------------------

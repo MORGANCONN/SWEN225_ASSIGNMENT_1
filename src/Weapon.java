@@ -21,9 +21,9 @@ public class Weapon extends MoveableObject
   // CONSTRUCTOR
   //------------------------
 
-  public Weapon(Point aLocation, Weapons weapon)
+  public Weapon(Point location, Weapons weapon)
   {
-    super(aLocation);
+    super(/**location**/);
     this.weapon = weapon;
   }
 
@@ -38,5 +38,10 @@ public class Weapon extends MoveableObject
 
   public void setWeapon(Weapons weapon) {
     this.weapon = weapon;
+  }
+
+  @Override
+  public String toString() {
+    return Character.toString(weapon.toString().charAt(0));
   }
 }
