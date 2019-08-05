@@ -6,8 +6,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-// line 27 "model.ump"
-// line 107 "model.ump"
+
 public class Board {
 
       /**
@@ -35,7 +34,6 @@ public class Board {
     private HashMap<CharacterCard.Character, Point> spawnPoints = new HashMap<>();
     private HashMap<Weapon, Point> weaponSpawn = new HashMap<>();
 
-    //Board Associations
     private Cell[][] cells = new Cell[25][24];
     private List<Player> players;
     private List<Weapon> weapons = new ArrayList<>();
@@ -137,8 +135,19 @@ public class Board {
         generateBallRoom();
         generateBilliardRoom();
         generateConservatory();
+        generateCellar();
 
+    }
 
+    /**
+     * Creates an impassable cellar at the center of the map
+     */
+    private void generateCellar() {
+        for (int row = 10; row <= 16 ; row++) {
+            for (int col = 10; col <= 14 ; col++) {
+                cells[row][col] = null;
+            }
+        }
     }
 
     /**

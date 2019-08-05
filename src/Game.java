@@ -70,9 +70,9 @@ public class Game {
    * @param p current player in the round
    * */
     private void round(Player p) {
-        System.out.println("/---------------------------------------------------/");
-        System.out.printf("/--------------------Start Of Player %d's Turn (%s)--------------------/\n", listOfPlayers.indexOf(p), p.getPlayerName());
-        System.out.println("/---------------------------------------------------/");
+        System.out.println("/-------------------------------------------------------------/");
+        System.out.printf("/--------------------Start Of Player %d's Turn (%s %s)--------------------/\n", listOfPlayers.indexOf(p),p.getPlayerName(),(p.getPlayerColors().get(p.getPlayerName())+ Character.toLowerCase(p.getPlayerName().toString().charAt(0))+boardColoration.RESET));
+        System.out.println("/-------------------------------------------------------------/");
         System.out.println(toString());
         Random diceRoll = new Random();
         int diceRollNumber = diceRoll.nextInt((12 - 2) + 1) + 2;
@@ -115,6 +115,24 @@ public class Game {
             }
             if(move(moveNumber, move, p)) {
                 diceRollNumber = diceRollNumber - moveNumber;
+            }
+            System.out.println("Do you want to move again and forfit your %i squares of movement?(y/n)");
+            BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+            String decision = "";
+            try {
+                decision = input.readLine();
+                while (true) {
+                    if (!(decision.equals("y") || decision.equals("n"))) {
+                        System.out.println("Invalid Input, Please Use (y/n)):");
+                        decision = input.readLine();
+                    } else {
+                        if(decision.equals("y")){
+                            break;
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
             System.out.println(toString());
         }
@@ -359,7 +377,7 @@ public class Game {
                 String ans = input.readLine();
                 while (true) {
                     if (!(ans.equals("y") || ans.equals("n"))) {
-                        System.out.println("Invalid ans, Please enter y or n in lower case:");
+                        System.out.println("Invalid decision, Please enter y or n in lower case:");
                         ans = input.readLine();
                     } else {
                         if(ans.equals("y")) {

@@ -109,4 +109,13 @@ public class Player extends MoveableObject
   public String toString() {
     return playerColors.get(playerName)+Character.toString(playerName.toString().charAt(0)).toLowerCase()+ boardColoration.RESET;
   }
+
+  /**
+   * Fetches a hashmap that contains each of the player's colors
+   * @return
+   */
+
+  public HashMap<CharacterCard.Character, String> getPlayerColors() {
+    return playerColors;
+  }
 }
