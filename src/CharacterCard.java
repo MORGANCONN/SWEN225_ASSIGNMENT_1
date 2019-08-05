@@ -34,6 +34,10 @@ public class CharacterCard extends Card
   // INTERFACE
   //------------------------
 
+    /**
+     *  sets name
+     * @param aName name of the character
+     */
   public boolean setName(Character aName)
   {
     boolean wasSet = false;
@@ -42,12 +46,19 @@ public class CharacterCard extends Card
     return wasSet;
   }
 
+    /**
+     * returns name
+     * @return name of character
+     */
   public Character getName()
   {
     return name;
   }
 
-  // line 70 "model.ump"
+     /**
+     *  toString method
+     * @return name of card
+     */
    public String toString(){
     return name.toString();
   }

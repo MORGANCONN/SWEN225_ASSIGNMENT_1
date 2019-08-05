@@ -21,9 +21,9 @@ public class Weapon extends MoveableObject
   // CONSTRUCTOR
   //------------------------
 
-  public Weapon(Point location, Weapons weapon)
+
+  public Weapon(Weapons weapon)
   {
-    super(/**location**/);
     this.weapon = weapon;
   }
 
@@ -31,17 +31,28 @@ public class Weapon extends MoveableObject
   // INTERFACE
   //------------------------
 
-
+  /**
+     *  returns the weapon
+     * @return the weapon
+     */
   public Weapons getWeapon() {
     return weapon;
   }
 
+  /**
+     *  sets the weapon
+     * @param weapon the enum of weapon
+     */
   public void setWeapon(Weapons weapon) {
     this.weapon = weapon;
   }
 
+/**
+     *  toString method
+     * @return lower case cyan colored indicator of which weapon it is
+     */
   @Override
   public String toString() {
-    return Character.toString(weapon.toString().charAt(0));
+    return ConsoleColors.CYAN+Character.toString(weapon.toString().charAt(0)).toLowerCase()+ConsoleColors.RESET;
   }
 }

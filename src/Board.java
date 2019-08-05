@@ -10,6 +10,15 @@ import java.util.List;
 // line 107 "model.ump"
 public class Board {
 
+      /**
+     *  returns cell at location
+     * @param location of cell
+     * @return Cell
+     */
+    public Cell getLocation(Point location) {
+        return cells[location.y][location.x];
+    }
+
     //------------------------
     // ENUMERATIONS
     //------------------------
@@ -23,52 +32,61 @@ public class Board {
     //------------------------
 
     // spawn points hashmap
-    HashMap<CharacterCard.Character, Point> spawnPoints = new HashMap<>();
-    HashMap<Weapon, Point> weaponSpawn = new HashMap<>();
+    private HashMap<CharacterCard.Character, Point> spawnPoints = new HashMap<>();
+    private HashMap<Weapon, Point> weaponSpawn = new HashMap<>();
 
     //Board Associations
     private Cell[][] cells = new Cell[25][24];
     private List<Player> players;
+    private List<Weapon> weapons = new ArrayList<>();
 
     //------------------------
     // CONSTRUCTOR
     //------------------------
 
-    public Board(/**int numberOfPlayers, List<Player> playerList**/) {
-        players = new ArrayList<Player>();
-        players.add(new Player(CharacterCard.Character.ProfessorPlum));
-        //players = playerList;
+    public Board(List<Player> playerList) {
+        players = playerList;
         setSpawnPoints();
         setWeaponPoints();
         generateBoard();
         generatePlayers(players);
         generateWeapons();
     }
-
-  private void generateWeapons() {
-      for (Weapon w : weaponSpawn.keySet()){
-        Point wp = weaponSpawn.get(w);
-      //  w.setLocation(wp);
-        cells[wp.y][wp.x].setItem(w);
-      }
-  }
-
-  private void generatePlayers(List<Player> players) {
-      for (Player p : players){
-        if (spawnPoints.containsKey(p.getPlayerName())){
-            Point sp = spawnPoints.get(p.getPlayerName());
-            ///p.setLocation(sp);
-            cells[sp.y][sp.x].setItem(p);
+    /**
+     *  Spawns weapons at cells on the board
+     */
+    private void generateWeapons() {
+        for (Weapon w : weaponSpawn.keySet()) {
+            Point wp = weaponSpawn.get(w);
+            w.setLocation(wp);
+            cells[wp.y][wp.x].setItem(w);
+            weapons.add(w);
         }
-      }
-  }
+    }
 
-  private void setWeaponPoints() {
+    /**
+     *  Spawns Players at cells on the board if the player is in the list
+     * @param players list of all players in the game
+     */
+    private void generatePlayers(List<Player> players) {
+        for (Player p : players) {
+            if (spawnPoints.containsKey(p.getPlayerName())) {
+                Point sp = spawnPoints.get(p.getPlayerName());
+                p.setLocation(sp);
+                cells[sp.y][sp.x].setItem(p);
+            }
+        }
+    }
+
+    /**
+     *  adds spawn points for every room into a list then shuffling and assigning to weapons
+     */
+    private void setWeaponPoints() {
         List<Point> wPoints = new ArrayList<>();
         wPoints.add(new Point(2, 1)); /// Kitchen
         wPoints.add(new Point(11, 2)); /// Ball Room
         wPoints.add(new Point(21, 1)); /// Conservatory
-        wPoints.add(new Point(21, 10)); /// Billard Room
+        wPoints.add(new Point(21, 10)); /// Billiard Room
         wPoints.add(new Point(21, 16)); /// Library
         wPoints.add(new Point(21, 22)); /// Study
         wPoints.add(new Point(12, 21)); /// Hall
@@ -77,11 +95,14 @@ public class Board {
         Collections.shuffle(wPoints);
         int i = 0;
         for (Weapon.Weapons w : Weapon.Weapons.values()) {
-            Weapon weaponObj = new Weapon(new Point(0,0), w);
+            Weapon weaponObj = new Weapon(w);
             weaponSpawn.put(weaponObj, wPoints.get(i++));
         }
     }
 
+    /**
+     *  adds the spawn points of every character into a map
+     */
     private void setSpawnPoints() {
         spawnPoints.put(CharacterCard.Character.MrsWhite, new Point(9, 0));
         spawnPoints.put(CharacterCard.Character.MrGreen, new Point(14, 0));
@@ -91,6 +112,10 @@ public class Board {
         spawnPoints.put(CharacterCard.Character.ColonelMustard, new Point(0, 17));
     }
 
+    /**
+     *  Populates the empty cells adding walls around the edges of the map then fills in
+     *  each room
+     */
     private void generateBoard() {
         //Set all as hallways
         for (int row = 0; row < 25; row++) {
@@ -111,75 +136,108 @@ public class Board {
         generateKitchen();
         generateBallRoom();
         generateBilliardRoom();
+        generateConservatory();
+
 
     }
 
-  private void generateBilliardRoom() {
-    for (int row = 8; row < 13; row++) {
-      for (int col = 18; col <24; col++) {
-          cells[row][col].setCellRoom(Cell.Room.BillardRoom);
-         if (row == 8){
-          cells[row][col].addWall(Cell.WallDirections.North);
-         }
-         if(row == 12){
-           if (col != 22){
-              cells[row][col].addWall(Cell.WallDirections.South);
+    /**
+     *  sets up all the Conservatory cells, adding walls and entrances
+     */
+    private void generateConservatory() {
+        for (int row = 1; row < 6; row++) {
+            for (int col = 18; col < 24; col++) {
+                if (row == 5 && (col == 18 || col == 23)) {
+                    continue;
+                }
+                if (col == 18) {
+                    cells[row][col].addWall(Cell.WallDirections.West);
+                    if (row == 4) {
+                        cells[row][col].setDoor(true);
+                    }
+                }
+                if (row == 5) {
+                    if (col == 19) {
+                        cells[row][col].addWall(Cell.WallDirections.West);
+                    }
+                    cells[row][col].addWall(Cell.WallDirections.South);
+                }
+                cells[row][col].setCellRoom(Cell.Room.Conservatory);
             }
-            else{
-              cells[row][col].setDoor(true);
-            }
-         }
-         if (col == 18){
-            if (row != 9){
-              cells[row][col].addWall(Cell.WallDirections.West);
-            }
-            else{
-              cells[row][col].setDoor(true);
-          }
+
         }
-      }
     }
-  }
 
-  private void generateLibrary() {
+    /**
+     *  sets up all the Billiard Room cells, adding walls and entrances
+     */
+    private void generateBilliardRoom() {
+        for (int row = 8; row < 13; row++) {
+            for (int col = 18; col < 24; col++) {
+                cells[row][col].setCellRoom(Cell.Room.BillardRoom);
+                if (row == 8) {
+                    cells[row][col].addWall(Cell.WallDirections.North);
+                }
+                if (row == 12) {
+                    if (col != 22) {
+                        cells[row][col].addWall(Cell.WallDirections.South);
+                    } else {
+                        cells[row][col].setDoor(true);
+                    }
+                }
+                if (col == 18) {
+                    if (row != 9) {
+                        cells[row][col].addWall(Cell.WallDirections.West);
+                    } else {
+                        cells[row][col].setDoor(true);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     *  sets up all the Library cells, adding walls and entrances
+     */
+    private void generateLibrary() {
         for (int row = 14; row < 19; row++) {
             for (int col = 17; col < 24; col++) {
                 if ((row == 14 && col == 17) || (row == 14 && col == 23) || (row == 18 && col == 17) || (row == 18 && col == 23)) {
                     continue;
                 }
                 cells[row][col].setCellRoom(Cell.Room.Library);
-                if (row == 14 && (col <= 18 || col >= 21)){
-                  if (col == 18){
-                    cells[row][col].addWall(Cell.WallDirections.West);
-                  }
-                  cells[row][col].addWall(Cell.WallDirections.North);
-                }
-                else if (row == 14 && col == 20){
-                  cells[row][col].setDoor(true);
-                }
-                if (row == 18){
-                  if (col == 18){
-                    cells[row][col].addWall(Cell.WallDirections.West);
-                  }
-                  cells[row][col].addWall(Cell.WallDirections.South);
-                }
-                if (col == 17){
-                  if (row == 15){
-                      cells[row][col].addWall(Cell.WallDirections.North);
-                      cells[row][col].addWall(Cell.WallDirections.West);
-                  }
-                  else if (row == 16){
+                if (row == 14 && (col <= 18 || col >= 21)) {
+                    if (col == 18) {
+                        cells[row][col].addWall(Cell.WallDirections.West);
+                    }
+                    cells[row][col].addWall(Cell.WallDirections.North);
+                } else if (row == 14 && col == 20) {
                     cells[row][col].setDoor(true);
-                  }
-                  else{
+                }
+                if (row == 18) {
+                    if (col == 18) {
+                        cells[row][col].addWall(Cell.WallDirections.West);
+                    }
                     cells[row][col].addWall(Cell.WallDirections.South);
-                    cells[row][col].addWall(Cell.WallDirections.West);
-                  }
+                }
+                if (col == 17) {
+                    if (row == 15) {
+                        cells[row][col].addWall(Cell.WallDirections.North);
+                        cells[row][col].addWall(Cell.WallDirections.West);
+                    } else if (row == 16) {
+                        cells[row][col].setDoor(true);
+                    } else {
+                        cells[row][col].addWall(Cell.WallDirections.South);
+                        cells[row][col].addWall(Cell.WallDirections.West);
+                    }
                 }
             }
         }
-}
+    }
 
+    /**
+     *  sets up all the Study cells, adding walls and entrances
+     */
     private void generateStudy() {
         for (int row = 21; row < 25; row++) {
             for (int col = 17; col < 24; col++) {
@@ -199,6 +257,9 @@ public class Board {
         }
     }
 
+    /**
+     *  sets up all the Hall cells, adding walls and entrances
+     */
     private void generateHall() {
         for (int row = 18; row < 25; row++) {
             for (int col = 9; col < 15; col++) {
@@ -220,6 +281,9 @@ public class Board {
         }
     }
 
+    /**
+     *  sets up all the Lounge cells, adding walls and entrances
+     */
     private void generateLounge() {
         for (int row = 19; row < 25; row++) {
             for (int col = 0; col < 7; col++) {
@@ -241,6 +305,9 @@ public class Board {
         }
     }
 
+    /**
+     *  sets up all the Dining Room cells, adding walls and entrances
+     */
     private void generateDiningRoom() {
         // Generate First Half
         for (int row = 9; row <= 15; row++) {
@@ -278,56 +345,81 @@ public class Board {
         }
     }
 
-    private void generateKitchen(){
+    /**
+     *  sets up all the Kitchen cells, adding walls and entrances
+     */
+    private void generateKitchen() {
         for (int row = 1; row <= 6; row++) {
             for (int col = 0; col <= 5; col++) {
-                if (row == 6) {
-                    if(col!=0){
-                        if(col==4){
-                            cells[row][col].setDoor(true);
-                        } else{
-                            cells[row][col].addWall(Cell.WallDirections.South);
-                        }
-                    }
+                if (col == 0 && row == 6) {
+                    continue;
                 }
                 if (col == 5) {
                     cells[row][col].addWall(Cell.WallDirections.East);
                 }
-                if(col!=0&&row!=6) {
-                    cells[row][col].setCellRoom(Cell.Room.Kitchen);
+                if (row == 6) {
+                    if (col != 4) {
+                        cells[row][col].addWall(Cell.WallDirections.South);
+                    } else {
+                        cells[row][col].setDoor(true);
+                    }
                 }
+                cells[row][col].setCellRoom(Cell.Room.Kitchen);
             }
         }
     }
 
-    private void generateBallRoom(){
+    /**
+     *  sets up all the Ballroom cells, adding walls and entrances
+     */
+    private void generateBallRoom() {
         // Generate Most Of Ball Room
-        for (int row = 3; row <= 8; row++) {
+        for (int row = 2; row <= 7; row++) {
             for (int col = 8; col <= 15; col++) {
                 if (row == 3) {
-                    if(col==8||col==9||col==14||col==15){
+                    if (col == 8 || col == 9 || col == 14 || col == 15) {
                         cells[row][col].addWall(Cell.WallDirections.North);
                     }
                 }
-                if (col == 8) {
-                    if(row==6){
+                if (row == 7) {
+                    if (col == 9 || col == 14) {
                         cells[row][col].setDoor(true);
-                    } else{
-                        cells[row][col].addWall(Cell.WallDirections.West);
+                    } else {
+                        cells[row][col].addWall(Cell.WallDirections.South);
                     }
                 }
-                if(row==8) {
-                    cells[row][col].addWall(Cell.WallDirections.South);
+                if (row == 5) {
+                    if (col == 8 || col == 15) {
+                        cells[row][col].setDoor(true);
+                    }
                 }
-                if(col == 15){
-                    cells[row][col].addWall(Cell.WallDirections.East);
+                if (col == 15) {
+                    if (!cells[row][col].isDoor())
+                        cells[row][col].addWall(Cell.WallDirections.East);
+                }
+                if (col == 8) {
+                    if (!cells[row][col].isDoor())
+                        cells[row][col].addWall(Cell.WallDirections.West);
                 }
                 cells[row][col].setCellRoom(Cell.Room.Ballroom);
             }
         }
+        // Generate Remaining Section Of Ballroom
+        for (int col = 10; col <= 13; col++) {
+            if (col == 10) {
+                cells[1][col].addWall(Cell.WallDirections.West);
+            }
+            if (col == 13) {
+                cells[1][col].addWall(Cell.WallDirections.East);
+            }
+            cells[1][col].setCellRoom(Cell.Room.Ballroom);
+        }
     }
 
 
+    /**
+     *  sets up all the conservatory cells, adding walls and entrances
+     */
     private void clearImpassableBlocks() {
         // Clear top row apart from spawn points
         for (int col = 0; col < 24; col++) {
@@ -369,12 +461,12 @@ public class Board {
         }
         // Clear appropriate far right cells
         for (int row = 0; row < 25; row++) {
-            if (row == 5 || row == 7 || row==13  ||row == 18 || row == 20) {
+            if (row == 5 || row == 7 || row == 13 || row == 18 || row == 20) {
                 cells[row - 1][23].addWall(Cell.WallDirections.South);
                 cells[row][22].addWall(Cell.WallDirections.West);
                 cells[row + 1][23].addWall(Cell.WallDirections.North);
                 cells[row][23] = null;
-            } else if(row==14){
+            } else if (row == 14) {
                 cells[row][22].addWall(Cell.WallDirections.West);
                 cells[row + 1][23].addWall(Cell.WallDirections.North);
                 cells[row][23] = null;
@@ -383,6 +475,15 @@ public class Board {
         }
     }
 
+    /**
+     * Makes the edges of the board
+     * @param row current row
+     * @param col current col
+     * @param minRow far left row
+     * @param minCol top col
+     * @param maxRow far right row
+     * @param maxCol bottom col
+     */
     private void fixWall(int row, int col, int minRow, int minCol, int maxRow, int maxCol) {
         if (row == minRow) {
             cells[row][col].addWall(Cell.WallDirections.West);
@@ -398,16 +499,10 @@ public class Board {
         }
     }
 
-    // line 31 "model.ump"
-    public void movePlayer(Player player, Direction direction) {
-
-    }
-
-    // line 32 "model.ump"
-    public void moveObjectTo(MoveableObject object, Point location) {
-
-    }
-
+    /**
+     *  toString method
+     * @return visual representation of the board
+     */
     @Override
     public String toString() {
         StringBuilder board = new StringBuilder();
@@ -422,5 +517,13 @@ public class Board {
             board.append('\n');
         }
         return board.toString();
+    }
+
+    public List<Weapon> getWeapons() {
+        return weapons;
+    }
+
+    public void setWeapons(List<Weapon> weapons) {
+        this.weapons = weapons;
     }
 }

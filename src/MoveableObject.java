@@ -16,21 +16,16 @@ public enum Direction{
   //------------------------
 
   //MoveableObject Attributes
-  private Point location;
-
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
-
-  public MoveableObject(/**Point aLocation**/)
-  {
-//    location = aLocation;
-  }
+  protected Point location;
 
   //------------------------
   // INTERFACE
   //------------------------
 
+    /**
+     *  sets location
+     * @param new location
+     */
   public void setLocation(Point aLocation)
   {
     location = new Point(aLocation);
@@ -41,6 +36,11 @@ public enum Direction{
     return location;
   }
 
+
+    /**
+     *  moves the object in a direction
+     * @param direction direction the object will move
+     */
   public void move(Direction direction){
     switch (direction){
       case NORTH:
@@ -54,6 +54,10 @@ public enum Direction{
     }
   }
 
+      /**
+     *  To string method
+     * @return String of the object
+     */
   public String toString()
   {
     return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +

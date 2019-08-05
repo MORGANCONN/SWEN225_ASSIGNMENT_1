@@ -31,20 +31,19 @@ public class RoomCard extends Card
   // INTERFACE
   //------------------------
 
-  public boolean setLocation(Room aLocation)
-  {
-    boolean wasSet = false;
-    roomName = aLocation;
-    wasSet = true;
-    return wasSet;
-  }
-
+    /**
+     *  returns the name of the room
+     * @return name of the room
+     */
   public Room getRoomName()
   {
     return roomName;
   }
 
-  // line 80 "model.ump"
+  /**
+     *  To string method
+     * @return name of the room
+     */
    public String toString(){
     return roomName.toString();
   }

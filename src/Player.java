@@ -6,50 +6,108 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-// line 41 "model.ump"
-// line 119 "model.ump"
+
+
 public class Player extends MoveableObject
+
 {
+     /**
+     *  adds a card to the hand
+     */
   public void addCard(Card remove) {
     cards.add(remove);
   }
 
-  //------------------------
-  // MEMBER VARIABLES
-  //------------------------
+
   private CharacterCard.Character playerName;
-  //Player Associations
-  private List<Card> cards;
+  private Boolean canMakeAccusations = true;
 
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
+  private List<Card> cards = new ArrayList<>();
+  private HashMap<CharacterCard.Character,String> playerColors;
 
-  public Player(/**Point aLocation,**/ CharacterCard.Character playerName) {
-    super(/**aLocation**/);
+
+  public Player(CharacterCard.Character playerName) {
     this.playerName = playerName;
+    playerColors = new HashMap<>();
+    generatePlayerColors();
   }
 
   //------------------------
-  // INTERFACE
+  // INTERFACECard
+
   //------------------------
   /* Code from template association_GetMany */
+
+    /**
+     *  returns card at that index   
+     * *param index index of card in players hard
+     * @return card object
+     */
   public Card getCard(int index)
   {
     Card aCard = cards.get(index);
     return aCard;
   }
 
+    /**
+     *  returns the character the player is
+     * @return name of the player
+     */
   public CharacterCard.Character getPlayerName() {
     return playerName;
   }
 
+    /**
+     *  sets the name of the player
+     * @param playerName name of the player
+     */
   public void setPlayerName(CharacterCard.Character playerName) {
     this.playerName = playerName;
   }
 
-  @Override
+    /**
+     *  adds unique colors for every player
+     */
+  private void generatePlayerColors() {
+    playerColors = new HashMap<>();
+    playerColors.put(CharacterCard.Character.MrsPeacock,ConsoleColors.BLUE);
+    playerColors.put(CharacterCard.Character.ProfessorPlum,ConsoleColors.PURPLE);
+    playerColors.put(CharacterCard.Character.ColonelMustard,ConsoleColors.YELLOW);
+    playerColors.put(CharacterCard.Character.MissScarlett,ConsoleColors.RED);
+    playerColors.put(CharacterCard.Character.MrGreen,ConsoleColors.GREEN);
+    playerColors.put(CharacterCard.Character.MrsWhite,ConsoleColors.WHITE);
+  }
+
+    /**
+     *  returns status of accusations
+     * @return whether the player can make accusations or not
+     */
+    public Boolean getCanMakeAccusations() {
+        return canMakeAccusations;
+    }
+
+    /**
+     *  sets status of accusations
+     * @param canMakeAccusations either true or false
+     */
+    public void setCanMakeAccusations(Boolean canMakeAccusations) {
+        this.canMakeAccusations = canMakeAccusations;
+    }
+
+    /**
+     *  returns a list of the players hand
+     * @return list of cards
+     */
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    /**
+     *  to string method
+     * @return string
+     */
+    @Override
   public String toString() {
-    return Character.toString(playerName.toString().charAt(0));
+    return playerColors.get(playerName)+Character.toString(playerName.toString().charAt(0)).toLowerCase()+ConsoleColors.RESET;
   }
 }

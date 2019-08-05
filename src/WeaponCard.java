@@ -34,6 +34,10 @@ public class WeaponCard extends Card
   // INTERFACE
   //------------------------
 
+      /**
+     *  sets weapon
+     * @aWeapon - Type of weapon
+     */
   public boolean setWeapon(WeaponType aWeapon)
   {
     boolean wasSet = false;
@@ -42,12 +46,19 @@ public class WeaponCard extends Card
     return wasSet;
   }
 
+    /**
+     *  returns weapon
+     * @return weaponType
+     */
   public WeaponType getWeapon()
   {
     return weapon;
   }
 
-  // line 60 "model.ump"
+  /**
+     *  returns the weapons to string
+     * @return returns the weapon enum string
+     */
    public String toString(){
     return weapon.toString();
   }

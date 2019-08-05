@@ -7,7 +7,10 @@
 // line 125 "model.ump"
 public class Card
 {
-    // line 51 "model.ump"
+       /**
+     * returns string
+     * @return strings
+     */
    public String toString(){
     return "";
   }
