@@ -2,8 +2,6 @@
 /*This code was generated using the UMPLE 1.29.1.4584.3d417815a modeling language!*/
 
 
-import java.awt.*;
-
 // line 94 "model.ump"
 // line 155 "model.ump"
 public class Weapon extends MoveableObject
@@ -53,6 +51,6 @@ public class Weapon extends MoveableObject
      */
   @Override
   public String toString() {
-    return ConsoleColors.CYAN+Character.toString(weapon.toString().charAt(0)).toLowerCase()+ConsoleColors.RESET;
+    return boardColoration.CYAN+Character.toString(weapon.toString().charAt(0)).toLowerCase()+ boardColoration.RESET;
   }
 }

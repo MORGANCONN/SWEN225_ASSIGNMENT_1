@@ -2,7 +2,6 @@
 /*This code was generated using the UMPLE 1.29.1.4584.3d417815a modeling language!*/
 
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -70,12 +69,12 @@ public class Player extends MoveableObject
      */
   private void generatePlayerColors() {
     playerColors = new HashMap<>();
-    playerColors.put(CharacterCard.Character.MrsPeacock,ConsoleColors.BLUE);
-    playerColors.put(CharacterCard.Character.ProfessorPlum,ConsoleColors.PURPLE);
-    playerColors.put(CharacterCard.Character.ColonelMustard,ConsoleColors.YELLOW);
-    playerColors.put(CharacterCard.Character.MissScarlett,ConsoleColors.RED);
-    playerColors.put(CharacterCard.Character.MrGreen,ConsoleColors.GREEN);
-    playerColors.put(CharacterCard.Character.MrsWhite,ConsoleColors.WHITE);
+    playerColors.put(CharacterCard.Character.MrsPeacock, boardColoration.BLUE);
+    playerColors.put(CharacterCard.Character.ProfessorPlum, boardColoration.PURPLE);
+    playerColors.put(CharacterCard.Character.ColonelMustard, boardColoration.YELLOW);
+    playerColors.put(CharacterCard.Character.MissScarlett, boardColoration.RED);
+    playerColors.put(CharacterCard.Character.MrGreen, boardColoration.GREEN);
+    playerColors.put(CharacterCard.Character.MrsWhite, boardColoration.WHITE);
   }
 
     /**
@@ -108,6 +107,6 @@ public class Player extends MoveableObject
      */
     @Override
   public String toString() {
-    return playerColors.get(playerName)+Character.toString(playerName.toString().charAt(0)).toLowerCase()+ConsoleColors.RESET;
+    return playerColors.get(playerName)+Character.toString(playerName.toString().charAt(0)).toLowerCase()+ boardColoration.RESET;
   }
 }

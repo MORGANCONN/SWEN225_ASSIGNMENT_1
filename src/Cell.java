@@ -2,9 +2,6 @@
 /*This code was generated using the UMPLE 1.29.1.4584.3d417815a modeling language!*/
 
 
-import java.io.Console;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -50,16 +47,16 @@ public class Cell {
      */
     private void generateRoomColors() {
         roomColors = new HashMap<>();
-        roomColors.put(Room.Hallway,ConsoleColors.WHITE);
-        roomColors.put(Room.Ballroom,ConsoleColors.BLUE);
-        roomColors.put(Room.Hall,ConsoleColors.BLUE);
-        roomColors.put(Room.BillardRoom,ConsoleColors.PURPLE);
-        roomColors.put(Room.Study,ConsoleColors.PURPLE);
-        roomColors.put(Room.Kitchen,ConsoleColors.PURPLE);
-        roomColors.put(Room.Conservatory,ConsoleColors.GREEN);
-        roomColors.put(Room.Lounge,ConsoleColors.GREEN);
-        roomColors.put(Room.DiningRoom,ConsoleColors.BLUE);
-        roomColors.put(Room.Library,ConsoleColors.GREEN);
+        roomColors.put(Room.Hallway, boardColoration.WHITE);
+        roomColors.put(Room.Ballroom, boardColoration.BLUE);
+        roomColors.put(Room.Hall, boardColoration.BLUE);
+        roomColors.put(Room.BillardRoom, boardColoration.PURPLE);
+        roomColors.put(Room.Study, boardColoration.PURPLE);
+        roomColors.put(Room.Kitchen, boardColoration.PURPLE);
+        roomColors.put(Room.Conservatory, boardColoration.GREEN);
+        roomColors.put(Room.Lounge, boardColoration.GREEN);
+        roomColors.put(Room.DiningRoom, boardColoration.BLUE);
+        roomColors.put(Room.Library, boardColoration.GREEN);
     }
 
 
@@ -138,6 +135,6 @@ public class Cell {
      *  @return character value of the room
      */
     public String toString() {
-        return (isDoor?ConsoleColors.RED:roomColors.get(cellRoom))+(item!=null?item.toString():(cellRoom.equals(Room.Hallway)?'_':cellRoom.toString().charAt(0)))+ConsoleColors.RESET;
+        return (isDoor? boardColoration.RED:roomColors.get(cellRoom))+(item!=null?item.toString():(cellRoom.equals(Room.Hallway)?'_':cellRoom.toString().charAt(0)))+ boardColoration.RESET;
     }
 }
