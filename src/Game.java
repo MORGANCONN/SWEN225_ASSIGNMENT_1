@@ -77,6 +77,7 @@ public class Game {
         Random diceRoll = new Random();
         int diceRollNumber = diceRoll.nextInt((12 - 2) + 1) + 2;
         //Process Player Movement
+        movementLoop:
         while (diceRollNumber > 0) {
             System.out.println("How many places do you want to move? You have " + diceRollNumber + " squares of movement left:");
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -116,23 +117,27 @@ public class Game {
             if(move(moveNumber, move, p)) {
                 diceRollNumber = diceRollNumber - moveNumber;
             }
-            System.out.println("Do you want to move again and forfit your %i squares of movement?(y/n)");
-            BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-            String decision = "";
-            try {
-                decision = input.readLine();
-                while (true) {
-                    if (!(decision.equals("y") || decision.equals("n"))) {
-                        System.out.println("Invalid Input, Please Use (y/n)):");
-                        decision = input.readLine();
-                    } else {
-                        if(decision.equals("y")){
-                            break;
+            if (board.getLocation(p.getLocation()).getCellRoom()!=Cell.Room.Hallway) {
+                System.out.println("Do you want to move again(y/n)");
+                BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+                String decision = "";
+                try {
+                    decision = input.readLine();
+                    while (true) {
+                        if (!(decision.equals("y") || decision.equals("n"))) {
+                            System.out.println("Invalid Input, Please Use (y/n)):");
+                            decision = input.readLine();
+                        } else {
+                            if(decision.equals("n")){
+                                break movementLoop;
+                            } else{
+                                break;
+                            }
                         }
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
             System.out.println(toString());
         }
@@ -185,9 +190,26 @@ public class Game {
         System.out.println("/---------------------------------------------------/");
         System.out.println("/--------------------End Of Turn--------------------/");
         System.out.println("/---------------------------------------------------/");
+        if(checkIfAllLost()){
+            System.out.println("You all failed to identify the murderer, they escaped punishment");
+            System.exit(0);
+        }
     }
 
-  /**
+    /**
+     * Determines if all of the players have made incorrect accusations
+     * @return true if all failed false if not
+     */
+    private boolean checkIfAllLost() {
+        for(Player P : listOfPlayers){
+            if(P.getCanMakeAccusations()){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
    * creates the number of players playing the game
    * then calls distribute cards
    * */
