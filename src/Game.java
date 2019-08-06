@@ -141,13 +141,35 @@ public class Game {
             }
             System.out.println(toString());
         }
-
+        //Check if player wants to see hand
+        System.out.println("Do you want to see your hand?(y/n)");
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        String decision = "";
+        try {
+            decision = input.readLine();
+            while (true) {
+                if (!(decision.equals("y") || decision.equals("n"))) {
+                    System.out.println("Invalid Input, Please Use (y/n)):");
+                    decision = input.readLine();
+                } else {
+                    if(decision.equals("y")){
+                        System.out.println("/----------Your Hand----------/");
+                        for (Card C: p.getCards()) {
+                            System.out.printf("Index: %d Card: %s\n",p.getCards().indexOf(C),C.toString());
+                        }
+                        break;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         //Process Suggestions And Accusation
         if (p.getCanMakeAccusations()) {
             if (board.getLocation(p.location).getCellRoom() != Cell.Room.Hallway) {
-                BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+                 input = new BufferedReader(new InputStreamReader(System.in));
                 System.out.println("Do you want to make a suggestion?(y/n)");
-                String decision = "";
+                 decision = "";
                 try {
                     decision = input.readLine();
                     while (true) {
@@ -168,8 +190,8 @@ public class Game {
             }
             try {
                 System.out.println("Do you want to make an accusation?(y/n)");
-                BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-                String decision = input.readLine();
+                 input = new BufferedReader(new InputStreamReader(System.in));
+                 decision = input.readLine();
                 while (true) {
                     if (!(decision.equals("y") || decision.equals("n"))) {
                         System.out.println("Invalid decision please use(y/n):");
